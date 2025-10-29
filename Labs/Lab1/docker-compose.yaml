@@ -1,0 +1,59 @@
+networks:
+  vulnlab-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+
+volumes:
+  wireguard-data:
+
+services:
+  ftp:
+    image: stilliard/pure-ftpd
+    container_name: ftp-vuln
+    networks:
+      vulnlab-net:
+        ipv4_address: 172.30.0.10
+    environment:
+      FTP_USER_NAME: user
+      FTP_USER_PASS: passw0rd
+      FTP_USER_HOME: /home/user
+  samba:
+    image: dluppoli/samba:4.6.3
+    container_name: samba
+    tty: true
+    volumes:
+      - ./smb.conf:/usr/local/samba/etc/smb.conf
+    networks:
+      vulnlab-net: 
+        ipv4_address: 172.30.0.11      
+  appweb:
+    image: dluppoli/provapraticafinale:2
+    container_name: appweb
+    tty: true
+    networks:
+      vulnlab-net: 
+        ipv4_address: 172.30.0.12
+  joomla:
+    image: vulhub/joomla:3.4.5
+    depends_on:
+      - mysql
+    ports:
+      - "80:80"
+    environment:
+      - JOOMLA_DB_HOST=mysql
+      - JOOMLA_DB_USER=root
+      - JOOMLA_DB_PASSWORD=StrongPass
+      - JOOMLA_DB_NAME=joomla
+      - JOOMLA_DB_PORT=3306
+    networks:
+      vulnlab-net: 
+        ipv4_address: 172.30.0.50
+  mysql:
+    image: mysql:5.5
+    environment:
+      - MYSQL_ROOT_PASSWORD=StrongPass
+    networks:
+      vulnlab-net: 
+        ipv4_address: 172.30.0.51
