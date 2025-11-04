@@ -1,0 +1,17 @@
+networks:
+  vulnlab-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.0.0/24
+
+volumes:
+  wireguard-data:
+
+services:
+  machine:
+    image: dluppoli/simulazione:1.2
+    container_name: machine
+    networks:
+      vulnlab-net:
+        ipv4_address: 172.100.0.10
