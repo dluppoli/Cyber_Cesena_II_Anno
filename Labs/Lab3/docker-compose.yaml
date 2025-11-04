@@ -1,0 +1,29 @@
+networks:
+  vulnlab-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.200.0.0/24
+
+volumes:
+  wireguard-data:
+
+services:
+  c1:
+    image: dluppoli/privesc:1.0
+    container_name: c1
+    networks:
+      vulnlab-net:
+        ipv4_address: 172.200.0.10
+  c2:
+    image: dluppoli/privesc:2.0
+    container_name: c2
+    networks:
+      vulnlab-net:
+        ipv4_address: 172.200.0.20
+  c3:
+    image: dluppoli/privesc:3.0
+    container_name: c3
+    networks:
+      vulnlab-net:
+        ipv4_address: 172.200.0.30
