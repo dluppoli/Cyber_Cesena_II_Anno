@@ -1,0 +1,37 @@
+alert tcp any any -> any any (
+    msg:"Accesso a login";
+    http_uri;
+    content:"login",nocase;
+    sid:1000001;
+    rev:1
+)
+
+alert tcp any any -> any any (
+    msg:"Password in chiaro";
+    http_method;
+    content:"POST";
+    http_client_body;
+    content:"password",nocase;
+    sid:1000002;
+    rev:1
+)
+
+alert tcp any any -> 10.0.2.15 22 (msg:"Connessione SSH";sid:1000003;rev:1)
+
+alert tcp any any -> any any (
+    msg:"SQLi su url";
+    http_uri;
+    content:"'",nocase;
+    sid:1000004;
+    rev:1
+)
+
+alert tcp any any -> any any (
+    msg:"SQLi su body";
+    http_method;
+    content:"POST";
+    http_client_body;
+    content:"'",nocase;
+    sid:1000005;
+    rev:1
+)
