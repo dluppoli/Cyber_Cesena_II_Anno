@@ -1,0 +1,17 @@
+networks:
+  privafinale-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.72.0.0/24
+
+volumes:
+  wireguard-data:
+
+services:
+  machine:
+    image: dluppoli/provafinalecyber:1.0
+    container_name: machinepf
+    networks:
+      privafinale-net:
+        ipv4_address: 172.72.0.27
